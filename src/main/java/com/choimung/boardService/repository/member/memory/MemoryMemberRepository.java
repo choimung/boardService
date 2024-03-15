@@ -11,7 +11,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class MemberMemberRepository implements MemberRepository {
+public class MemoryMemberRepository implements MemberRepository {
 
     private static Map<Long, Member> store = new HashMap<>();
     private static Long sequence = 0L;
@@ -57,5 +57,9 @@ public class MemberMemberRepository implements MemberRepository {
     @Override
     public void delete(Long memberId) {
         store.remove(memberId);
+    }
+
+    public void clareStore() {
+        store.clear();
     }
 }
