@@ -27,6 +27,7 @@
 ### [🖥 시스템]
 - 필터와 인터셉트
   - 현재는 필터와 인터셉트를 활용하고 있으나, 보다 강력한 보안을 위해 Spring Security로 전환할 예정입니다.
+<br>
 
 ### [🙋사용자]
 
@@ -49,7 +50,8 @@
 
 - 회원등급
   - 회원의 등급을 나뉘어 관리자의 기능을 부여하였습니다.
-  
+
+<br>
 
 ### [✏게시판]
 
@@ -74,7 +76,7 @@
 ## 📃 API 명세서
 
 | Description | EndPoint | Path Variable | Method | Controller |
-| --- | --- | --- | --- | --- |
+| :---: | :---: | :---: | :---: | :---: |
 | 회원가입 폼 | /users/signup |  | GET | UserController |
 | 로그인 폼 | /users/login |  | GET | UserController |
 | 회원가입 | /users/signup |  | POST | UserController |
@@ -87,13 +89,9 @@
 | 게시물 수정 | /posts/postId | {postId} - 수정할 게시물의 id | PUT |  |
 | 게시물 삭제 | /posts/postId | {postId} - 삭제할 게시물의 id | DELETE |  |
 
-
-
-
 <br>
 
----
-### 프로젝트 개발중 발생했던 에러
+## 💥프로젝트 개발중 발생했던 에러
 
 `java.lang.IllegalStateException: ApplicationContext failure threshold (1) exceeded:`
 ```
