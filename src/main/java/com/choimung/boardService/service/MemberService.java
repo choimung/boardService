@@ -15,4 +15,10 @@ public class MemberService {
     public void join(Member member){
         memberRepository.save(member);
     }
+
+    public Member login(String loginId, String password) {
+        return memberRepository.findByLoginId(loginId)
+                .filter(m -> m.getPassword().equals(password))
+                .orElse(null);
+    }
 }

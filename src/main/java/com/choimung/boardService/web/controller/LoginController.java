@@ -6,6 +6,8 @@ import com.choimung.boardService.dto.MemberLoginDto;
 import com.choimung.boardService.dto.MemberSignupDto;
 import com.choimung.boardService.service.FileService;
 import com.choimung.boardService.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +39,26 @@ public class LoginController {
         return "login/loginForm";
     }
 
+    @PostMapping("/login")
+    public String login(@ModelAttribute("loginDto") MemberLoginDto memberLoginDto, BindingResult bindingResult, HttpServletRequest request) {
+
+        Member loginMember = memberService.login(memberLoginDto.getLoginId(), memberLoginDto.getPassword());
+
+        if (loginMember == null) {
+            bindingResult.reject("loginFail", "ID 또는 PW가 일치하지 않습니다.");
+        }
+
+        if (bindingResult.hasErrors()) {
+            log.info("error = {}", bindingResult);
+            return "login/loginForm";
+        }
+        HttpSession session = request.getSession(true);
+        session.setAttribute("loginMember", loginMember);
+
+        return "redirect:/posts";
+
+    }
+
     @GetMapping("/signup")
     public String signupForm(Model model) {
         model.addAttribute("signupDto", new MemberSignupDto());
@@ -44,9 +66,10 @@ public class LoginController {
     }
 
     @PostMapping("/signup")
-    public String signup(@Validated @ModelAttribute("signupDto") MemberSignupDto memberSignupDto, BindingResult bindingResult) throws IOException {
+    public String signup(@Validated @ModelAttribute("signupDto") MemberSignupDto memberSignupDto,
+                         BindingResult bindingResult) throws IOException {
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             log.info("error = {}", bindingResult);
             return "login/memberSignup";
         }
@@ -58,9 +81,9 @@ public class LoginController {
         member.setGrade(Grade.USER);
         member.setImage(fileService.storeFile(memberSignupDto.getImage()));
         memberService.join(member);
+
         return "redirect:/";
     }
-
 
 
 }
