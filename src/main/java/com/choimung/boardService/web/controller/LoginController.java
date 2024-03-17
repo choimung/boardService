@@ -80,8 +80,8 @@ public class LoginController {
         member.setNickname(memberSignupDto.getNickName());
         member.setGrade(Grade.USER);
         member.setImage(fileService.storeFile(memberSignupDto.getImage()));
-        memberService.join(member);
 
+        memberService.join(member);
         return "redirect:/";
     }
 
