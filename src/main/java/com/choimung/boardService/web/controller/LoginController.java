@@ -40,7 +40,8 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute("loginDto") MemberLoginDto memberLoginDto, BindingResult bindingResult, HttpServletRequest request) {
+    public String login(@ModelAttribute("loginDto") MemberLoginDto memberLoginDto, BindingResult bindingResult,
+                        HttpServletRequest request) {
 
         Member loginMember = memberService.login(memberLoginDto.getLoginId(), memberLoginDto.getPassword());
 
@@ -57,6 +58,17 @@ public class LoginController {
 
         return "redirect:/posts";
 
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+            session.invalidate();
+        }
+
+        return "redirect:/";
     }
 
     @GetMapping("/signup")
