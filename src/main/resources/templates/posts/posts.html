@@ -66,7 +66,7 @@
                     <td class="post_id" th:text="${post.id}" >1</td>
                     <td class="post_title">
                    <div class="post_img">
-                       <img class="post_image" th:if="${post.image != null}" th:src="@{/posts/image/{imagename}(imagename=${post.image.getStoreFileName()})}" alt="">
+                       <img class="post_image" th:if="${post.image != null}" th:src="@{/posts/image/{imagename}(imagename=${post.image})}" alt="">
 
 <!--                       <img class="post_image" src="h.png" th:src="@{/posts/image/{imagename}(imagename = ${post.image.getStoreFileName()})}" alt="">-->
                    </div>
@@ -84,7 +84,7 @@
     <div class="menu_box">
       
        <div class="post_menu">
-           <button style="cursor: pointer" th:onclick="|if (${user == null}){ alert('로그인 후 사용하세요.'); } else { location.href='@{/posts/add}'; }|">글작성</button>
+           <button style="cursor: pointer" th:onclick="|if (${loginMember == null}) { alert('로그인 후 사용하세요.'); } else { location.href='@{/posts/add}'; }|">글작성</button>
        </div>
        
 <!--        <div class="page_btn">-->

@@ -1,22 +1,66 @@
 package com.choimung.boardService.web.controller;
 
 import com.choimung.boardService.domain.member.Member;
+import com.choimung.boardService.domain.post.Post;
+import com.choimung.boardService.dto.PostsAddDto;
+import com.choimung.boardService.service.FileService;
+import com.choimung.boardService.service.PostsService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+@RequiredArgsConstructor
 @RequestMapping("/posts")
 @Controller
 public class PostsController {
+
+    private final PostsService postsService;
+    private final FileService fileService;
+
     @GetMapping
     public String posts(@SessionAttribute(value = "loginMember", required = false) Member member, Model model) {
-
+        List<Post> posts = postsService.findAll();
         model.addAttribute("loginMember", member);
-
+        model.addAttribute("posts", posts);
         return "posts/posts";
+    }
+
+    @GetMapping("/add")
+    public String postAddForm(@SessionAttribute(value = "loginMember", required = false) Member member, Model model) {
+        model.addAttribute("loginMember", member);
+        model.addAttribute("postAddDto", new PostsAddDto());
+        return "posts/postsAddForm";
+    }
+
+    @PostMapping("/add")
+    public String postAdd(@SessionAttribute(value = "loginMember") Member member, @ModelAttribute PostsAddDto postsAddDto)
+            throws IOException {
+
+        String image = fileService.storeFile(postsAddDto.getImage());
+
+        Post post = new Post(postsAddDto.getTitle(), member.getNickname(), postsAddDto.getContent(), "today", image, 1L);
+
+        postsService.save(post);
+        return "redirect:/posts";
+    }
+
+    @GetMapping("/image/{fileName}")
+    @ResponseBody
+    public UrlResource showImage(@PathVariable String fileName) throws MalformedURLException {
+        return new UrlResource("file:" + fileService.getPullPath(fileName));
     }
 }
