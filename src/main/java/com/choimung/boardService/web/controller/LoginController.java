@@ -56,6 +56,8 @@ public class LoginController {
         HttpSession session = request.getSession(true);
         session.setAttribute("loginMember", loginMember);
 
+        log.info("member = {}", loginMember);
+
         return "redirect:/posts";
 
     }

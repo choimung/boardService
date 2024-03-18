@@ -66,6 +66,12 @@ public class PostsController {
         return "posts/post";
     }
 
+    @GetMapping("/{postId}/delete")
+    public String postDelete(@PathVariable Long postId) {
+        postsService.delete(postId);
+        return "redirect:/posts";
+    }
+
     @GetMapping("/image/{fileName}")
     @ResponseBody
     public UrlResource showImage(@PathVariable String fileName) throws MalformedURLException {
