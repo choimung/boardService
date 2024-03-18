@@ -19,6 +19,9 @@ public class Post {
 
     private Long views;
 
+    public Post() {
+    }
+
     public Post(String title, String author, String content, String createData, String image, Long views) {
         this.title = title;
         this.author = author;

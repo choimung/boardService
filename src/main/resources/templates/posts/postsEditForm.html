@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500&display=swap" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/e818618146.js" crossorigin="anonymous"></script>
+
+    <title>New Post</title>
+    <style>
+        
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+}
+a {
+    text-decoration: none;
+    font-weight: 500;
+    color: black;
+}
+        .container {
+            position: relative;
+            max-width: 1170px;
+            margin: 20px auto;
+            padding: 40px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        h1 {
+            color: #007bff;
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+        textarea {
+            height: 130px;
+        }
+
+        button {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 0px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+        .menu {
+            position: absolute;
+            right: 30px;
+            bottom: 16px;
+        }
+        .fa-pencil {
+            margin-top: -1px;
+            font-size: 16px;
+        }
+        i {
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            margin-left: -10px;;
+            margin-top: -5px;
+            font-size: 20px
+        }
+        
+        /** header 시작 **/
+        
+header{
+    position: relative;
+    max-width: 1245px;
+    margin: 0px auto;
+    font-family: 'Noto Sans KR', sans-serif;
+    width: inherit;
+    height: 75px;
+    background-color: #fff;
+    border: 1px solid #e3e3e3;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    }
+
+header .login {
+    position: absolute;
+    display: block;
+    right: 0;
+    width: 300px;
+    height: 10px;
+/*    background-color: #d4d4d4;*/
+}
+
+.hr_1{
+    margin-top: 5px;
+    margin-left: -44px;
+    margin-bottom: 0px;
+
+}
+
+
+header .login .login_user{
+    position: relative;
+    background-color: #fff;
+    right: -120px;
+    display: block;
+    margin-top: 12px;
+    margin-left: 100px;
+}
+
+header .login .signup {
+    top: 8px;
+    display: inline-block;
+    position: absolute;
+    right: 100px;
+    width: 60px;
+    height: 30px;
+    background-color: #407bc1;
+    border-radius: 10px;
+    text-align: center;
+}
+
+header .login .rank {
+    margin-top: -5px;
+    font-size: 11px;
+    font-weight: 500;
+    margin-bottom: -5px;
+    color: #7e7e7e;
+}
+
+header .login .profile_img {
+    position: absolute;
+    left: -30px;
+    top: 3px;
+    max-width: 30px;
+    max-height: 30px;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    margin-left: -10px;
+}
+header .login .login_form {
+    width: 300px;
+    margin-left: -46px;
+/*    background-color: #123;*/
+    display: flex;
+    margin-top: 5px;
+}
+header .login .login_form a{
+    font-size: 11px;
+    font-weight: 500;
+    color: #9f9f9f;
+    display: block;
+    margin-right: 20px;
+}
+
+header .login .fa-right-from-bracket{
+    font-size: 23px;
+    margin-left: 4px;
+    color: #3976be;
+}
+
+header .login .signup a{
+    color: #fff;
+}
+
+
+header .login .signup{
+    display: inline-block;
+}
+
+        
+    </style>
+</head>
+<body>
+   <header>
+
+       <div class="login">
+           <div class="login_user">
+               <img class="profile_img" th:if="${loginMember != null and loginMember.image != null}" th:src="|/user/profile/${loginMember.image}|" alt="">
+               <p class ="rank" th:if="${loginMember != null}" th:text="${loginMember.getGrade()}"> Admin </p>
+               <a th:text="${loginMember != null ? loginMember.getNickname() : '비회원'}" th:href="@{/user/{loginId}/edit(loginId=${loginMember?.loginId})}">
+                   비회원
+               </a>
+
+               <div class="login_form">
+                   <a href="#" th:href="@{/user/logout}" th:if="${loginMember != null}" class="login_btn"> 로그아웃 </a>
+                   <a href="#" th:if="${loginMember == null}" th:href="@{/user/login}" class="login_btn"> 로그인 </a>
+                   <a href="#" th:href="@{/user/signup}" class="login_btn"> 회원가입 </a>
+               </div>
+           </div>
+       </div>
+       
+   </header>
+    <div class="container">
+        <form th:action method="post" th:object="${post}" enctype="multipart/form-data">
+
+            <label for="postTitle">제목</label>
+            <input type="text" id="postTitle" name="postTitle" th:field="*{title}" placeholder="제목을 입력해주세요.">
+
+            <label for="image">이미지</label>
+            <input type="file" class="form-control-file" id="image" th:field="*{image}" accept="image/*">
+            
+            <label for="postContent">내용</label>
+            <textarea id="postContent" name="postContent"  th:field="*{content}" placeholder="콘텐츠 내용을 입력해주세요."></textarea>
+
+          <div class="menu">   
+            <button type="submit"><i class="fa-solid fa-pencil"></i></button>
+            <button type="button" th:onclick="|location.href='@{/posts}'|"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+
+        </form>
+    </div>
+</body>
+</html>

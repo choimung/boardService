@@ -1,6 +1,7 @@
 package com.choimung.boardService.service;
 
 import com.choimung.boardService.domain.post.Post;
+import com.choimung.boardService.dto.PostUpdateDto;
 import com.choimung.boardService.repository.post.PostRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,10 @@ public class PostsService {
 
     public List<Post> findAll(){
         return postRepository.findAll();
+    }
+
+    public void update(Long postId, Post postUpdateDto){
+        postRepository.update(postId, postUpdateDto);
     }
 
     public void delete(Long postId){

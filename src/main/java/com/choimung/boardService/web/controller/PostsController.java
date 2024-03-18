@@ -2,6 +2,7 @@ package com.choimung.boardService.web.controller;
 
 import com.choimung.boardService.domain.member.Member;
 import com.choimung.boardService.domain.post.Post;
+import com.choimung.boardService.dto.PostUpdateDto;
 import com.choimung.boardService.dto.PostsAddDto;
 import com.choimung.boardService.service.FileService;
 import com.choimung.boardService.service.PostsService;
@@ -55,6 +56,30 @@ public class PostsController {
 
         postsService.save(post);
         return "redirect:/posts";
+    }
+
+    @GetMapping("/{postId}/edit")
+    public String postEditForm(@SessionAttribute(value = "loginMember") Member member, @PathVariable Long postId, Model model) {
+        Post post = postsService.findById(postId);
+        model.addAttribute("loginMember", member);
+        model.addAttribute("post", post);
+        return "posts/postsEditForm";
+    }
+
+    @PostMapping("/{postId}/edit")
+    public String postEdit(@SessionAttribute(value = "loginMember") Member member, @PathVariable Long postId, Model model,
+                           @ModelAttribute PostUpdateDto postUpdateDto) throws IOException {
+
+        Post post = postsService.findById(postId);
+        post.setTitle(postUpdateDto.getTitle());
+        post.setContent(postUpdateDto.getContent());
+
+        if(postUpdateDto.getImage() != null){
+            post.setImage(fileService.storeFile(postUpdateDto.getImage()));
+        }
+
+        postsService.update(postId, post);
+        return "redirect:/posts/{postId}";
     }
 
     @GetMapping("/{postId}")

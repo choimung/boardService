@@ -18,17 +18,17 @@ public class MemoryPostRepository implements PostRepository {
 
     @Override
     public Post save(Post post) {
-
         post.setId(++sequence);
         store.put(post.getId(), post);
         return post;
     }
 
     @Override
-    public Post update(Long postId, PostUpdateDto postUpdateDto) {
+    public Post update(Long postId, Post postUpdateDto) {
         Post post = findById(postId).get();
         post.setTitle(postUpdateDto.getTitle());
         post.setContent(postUpdateDto.getContent());
+        post.setImage(postUpdateDto.getImage());
         return post;
     }
 
