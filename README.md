@@ -111,7 +111,7 @@ CREATE TABLE posts
     author varchar(20),
     image     varchar(255),
     content    varchar(20),
-    views    INT,
+    views    bigint,
     primary key (id)
 )
 ```
