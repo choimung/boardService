@@ -73,16 +73,7 @@ public class PostsController {
     @PostMapping("/{postId}/edit")
     public String postEdit(@SessionAttribute(value = "loginMember") Member member, @PathVariable Long postId, Model model,
                            @ModelAttribute PostUpdateDto postUpdateDto) throws IOException {
-
-        Post post = postsService.findById(postId);
-        post.setTitle(postUpdateDto.getTitle());
-        post.setContent(postUpdateDto.getContent());
-
-        if(postUpdateDto.getImage() != null){
-            post.setImage(fileService.storeFile(postUpdateDto.getImage()));
-        }
-
-        postsService.update(postId, post);
+        postsService.update(postId, postUpdateDto);
         return "redirect:/posts/{postId}";
     }
 

@@ -20,7 +20,7 @@
            <div class="login_user">
                <img class="profile_img" th:if="${loginMember != null and loginMember.image != null}" th:src="|/user/profile/${loginMember.image}|" alt="">
               <p class ="rank" th:if="${loginMember != null}" th:text="${loginMember.getGrade()}"> Admin </p>
-               <a th:text="${loginMember != null ? loginMember.getNickname() : '비회원'}" th:href="@{/user/{loginId}/edit(loginId=${loginMember?.loginId})}">
+               <a th:text="${loginMember != null ? loginMember.getNickname() : '비회원'}" th:href="@{/user/edit}">
                    비회원
                </a>
 

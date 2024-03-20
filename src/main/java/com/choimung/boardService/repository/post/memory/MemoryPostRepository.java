@@ -4,6 +4,8 @@ import com.choimung.boardService.domain.post.Post;
 import com.choimung.boardService.dto.PostUpdateDto;
 import com.choimung.boardService.repository.post.PostRepository;
 import com.choimung.boardService.repository.post.PostSearchCond;
+import com.choimung.boardService.service.FileService;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -11,11 +13,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+@RequiredArgsConstructor
 @Repository
 public class MemoryPostRepository implements PostRepository {
+
+    private final FileService fileService;
 
     private static Map<Long, Post> store = new HashMap<>();
     private static Long sequence = 0L;
@@ -29,13 +35,20 @@ public class MemoryPostRepository implements PostRepository {
     }
 
     @Override
-    public Post update(Long postId, Post postUpdateDto) {
-        Post post = findById(postId).get();
-        post.setTitle(postUpdateDto.getTitle());
-        post.setContent(postUpdateDto.getContent());
-        post.setImage(postUpdateDto.getImage());
-        post.setCreateDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
-        return post;
+    public Post update(Long postId, PostUpdateDto postUpdateDto) {
+        Post findPost = findById(postId).get();
+
+        findPost.setTitle(postUpdateDto.getTitle());
+        findPost.setContent(postUpdateDto.getContent());
+        findPost.setCreateDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+
+        try {
+            findPost.setImage(fileService.storeFile(postUpdateDto.getImage()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return findPost;
     }
 
     @Override

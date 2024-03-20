@@ -16,6 +16,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @SpringBootTest
@@ -62,7 +63,7 @@ class MemoryMemberRepositoryTest {
         Member savedMember = memberRepository.save(member);
 
         //when
-        MemberUpdateDto memberUpdateDto = new MemberUpdateDto("4321", "ONE", "updateImage");
+        MemberUpdateDto memberUpdateDto = new MemberUpdateDto("4321", "ONE", null);
         memberRepository.update(savedMember.getId(), memberUpdateDto);
 
         //then

@@ -23,7 +23,7 @@ public class PostsService {
         return postRepository.findAll(postSearchCond);
     }
 
-    public void update(Long postId, Post postUpdateDto){
+    public void update(Long postId, PostUpdateDto postUpdateDto){
         postRepository.update(postId, postUpdateDto);
     }
 

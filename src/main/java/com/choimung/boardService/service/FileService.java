@@ -18,7 +18,6 @@ public class FileService {
     }
 
     public String storeFile(MultipartFile multipartFile) throws IOException {
-
         if (multipartFile.isEmpty()) {
             return null;
         }

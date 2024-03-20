@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500&display=swap"
+          rel="stylesheet">
+
+    <title>회원수정</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #ffffffff;
+            color: #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .signup-container {
+            width: 300px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+        }
+
+        .signup-form {
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            transition: background-color 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background-color: #545b62;
+            border-color: #545b62;
+        }
+
+        .field-error {
+            border-color: darkred;
+            color: darkred;
+        }
+        /* 추가된 스타일 */
+        .profile-image-input {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="signup-container">
+    <h2 class="text-center">회원수정</h2>
+    <form class="signup-form" th:action th:object="${member}" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="password">비밀번호:</label>
+            <input type="password" class="form-control" id="password" name="password" th:field="*{password}"
+                   th:errorclass="field-error" placeholder="비밀번호를 입력하세요">
+            <div class="field-error" th:errors="*{password}"></div>
+        </div>
+        <div class="form-group">
+            <label for="name">이름:</label>
+            <input type="text" class="form-control" id="name" name="name" th:field="*{nickname}" th:errorclass="field-error"
+                   placeholder="이름을 입력하세요">
+            <div class="field-error" th:errors="*{nickname}"></div>
+        </div>
+        <div class="form-group dog-image-upload">
+            <label for="image">Image:</label>
+            <input type="file" class="form-control-file" id="image"  th:field="*{image}" accept="image/*">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">수정하기</button>
+        <a href="#" th:href="@{/posts}" class="btn btn-secondary btn-block mt-2">취소</a>
+    </form>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

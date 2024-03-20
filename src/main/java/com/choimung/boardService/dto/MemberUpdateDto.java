@@ -1,6 +1,7 @@
 package com.choimung.boardService.dto;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class MemberUpdateDto {
@@ -9,12 +10,12 @@ public class MemberUpdateDto {
 
     private String nickname;
 
-    private String image;
+    private MultipartFile image;
 
     public MemberUpdateDto() {
     }
 
-    public MemberUpdateDto(String password, String nickname, String image) {
+    public MemberUpdateDto(String password, String nickname, MultipartFile image) {
         this.password = password;
         this.nickname = nickname;
         this.image = image;
