@@ -5,10 +5,13 @@ import com.choimung.boardService.dto.PostUpdateDto;
 import com.choimung.boardService.repository.post.PostRepository;
 import com.choimung.boardService.repository.post.PostSearchCond;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +31,7 @@ public class JdbcPostRepository implements PostRepository {
 
     @Override
     public Post save(Post post) {
-        String sql = "INSERT INTO posts (title, author, image, content) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO posts (title, author, image, content, views, create_date) VALUES (?,?,?,?,?,?)";
 
         Connection con = null;
         PreparedStatement ps = null;
@@ -41,6 +44,8 @@ public class JdbcPostRepository implements PostRepository {
             ps.setString(2, post.getAuthor());
             ps.setString(3, post.getImage());
             ps.setString(4, post.getContent());
+            ps.setLong(5, 0L);
+            ps.setString(6, (LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd  HH:mm:ss"))));
             ps.executeUpdate();
             rs = ps.getGeneratedKeys();
 
@@ -97,6 +102,8 @@ public class JdbcPostRepository implements PostRepository {
                 post.setTitle(rs.getString("title"));
                 post.setAuthor(rs.getString("author"));
                 post.setContent(rs.getString("content"));
+                post.setViews(rs.getLong("views"));
+                post.setCreateDate(rs.getString("create_date"));
                 posts.add(post);
             }
 
@@ -114,11 +121,67 @@ public class JdbcPostRepository implements PostRepository {
 
     @Override
     public Optional<Post> findById(Long postId) {
-        return Optional.empty();
+
+        String sql = "SELECT * FROM POSTS WHERE id = ?";
+
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try{
+            con = getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setLong(1, postId);
+            rs = ps.executeQuery();
+
+            if(rs.next()) {
+                Post post = new Post();
+                post.setId(rs.getLong("id"));
+                post.setTitle(rs.getString("title"));
+                post.setAuthor(rs.getString("author"));
+                post.setImage(rs.getString("image"));
+                long views = rs.getLong("views");
+                post.setViews(++views);
+                post.setContent(rs.getString("content"));
+                post.setCreateDate(rs.getString("create_date"));
+                return Optional.of(post);
+            }
+
+            return Optional.empty();
+
+        } catch (SQLException e) {
+            log.error("db error", e);
+            throw new RuntimeException(e);
+        } finally {
+            JdbcUtils.closeResultSet(rs);
+            JdbcUtils.closeStatement(ps);
+            JdbcUtils.closeConnection(con);
+        }
+
     }
 
     @Override
     public void delete(Long postId) {
+        String sql = "DELETE FROM POSTS WHERE id = ?";
+
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try{
+            con = getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setLong(1, postId);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            log.error("db error", e);
+            throw new RuntimeException(e);
+        } finally {
+            JdbcUtils.closeResultSet(rs);
+            JdbcUtils.closeStatement(ps);
+            JdbcUtils.closeConnection(con);
+        }
 
     }
 

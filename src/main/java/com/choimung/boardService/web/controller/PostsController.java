@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.UrlResource;
@@ -40,9 +41,13 @@ public class PostsController {
     @GetMapping
     public String posts(@SessionAttribute(value = "loginMember", required = false) Member member, Model model,
                         @ModelAttribute("search") PostSearchCond postSearchCond) {
-        Member loginMember = memberService.findById(member.getId()).get();
+
+        if(member != null) {
+            memberService.findById(member.getId())
+                    .ifPresent(loginMember -> model.addAttribute("loginMember", loginMember));
+        }
+
         List<Post> posts = postsService.findAll(postSearchCond);
-        model.addAttribute("loginMember", loginMember);
         model.addAttribute("posts", posts);
         return "posts/posts";
     }
@@ -78,11 +83,14 @@ public class PostsController {
     }
 
     @GetMapping("/{postId}")
-    public String post(@SessionAttribute(value = "loginMember") Member member, @PathVariable Long postId, Model model) {
+    public String post(@SessionAttribute(value = "loginMember", required = false) Member member, @PathVariable Long postId, Model model) {
+
+        if(member != null) {
+            memberService.findById(member.getId())
+                    .ifPresent(loginMember -> model.addAttribute("loginMember", loginMember));
+        }
+
         Post post = postsService.findById(postId);
-        Long views = post.getViews();
-        post.setViews(++views);
-        model.addAttribute("loginMember", member);
         model.addAttribute("post", post);
         return "posts/post";
     }
