@@ -52,8 +52,7 @@ public class PostsController {
             throws IOException {
 
         String image = fileService.storeFile(postsAddDto.getImage());
-        Post post = new Post(postsAddDto.getTitle(), member.getNickname(), postsAddDto.getContent(), "today", image, 1L);
-
+        Post post = new Post(postsAddDto.getTitle(), member.getNickname(), postsAddDto.getContent(), "today", image, 0L);
         postsService.save(post);
         return "redirect:/posts";
     }
@@ -84,8 +83,9 @@ public class PostsController {
 
     @GetMapping("/{postId}")
     public String post(@SessionAttribute(value = "loginMember") Member member, @PathVariable Long postId, Model model) {
-
         Post post = postsService.findById(postId);
+        Long views = post.getViews();
+        post.setViews(++views);
         model.addAttribute("loginMember", member);
         model.addAttribute("post", post);
         return "posts/post";
