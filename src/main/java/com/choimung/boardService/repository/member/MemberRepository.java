@@ -1,6 +1,7 @@
 package com.choimung.boardService.repository.member;
 
 import com.choimung.boardService.domain.member.Member;
+import com.choimung.boardService.dto.MemberSignupDto;
 import com.choimung.boardService.dto.MemberUpdateDto;
 import java.util.List;
 import java.util.Optional;

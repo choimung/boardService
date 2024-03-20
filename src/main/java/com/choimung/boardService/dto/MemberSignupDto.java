@@ -16,4 +16,14 @@ public class MemberSignupDto {
 
     private MultipartFile image;
 
+
+    public MemberSignupDto() {
+    }
+
+    public MemberSignupDto(String loginId, String password, String nickName, MultipartFile image) {
+        this.loginId = loginId;
+        this.password = password;
+        this.nickName = nickName;
+        this.image = image;
+    }
 }

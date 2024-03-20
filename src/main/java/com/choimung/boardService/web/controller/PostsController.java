@@ -6,6 +6,7 @@ import com.choimung.boardService.dto.PostUpdateDto;
 import com.choimung.boardService.dto.PostsAddDto;
 import com.choimung.boardService.repository.post.PostSearchCond;
 import com.choimung.boardService.service.FileService;
+import com.choimung.boardService.service.MemberService;
 import com.choimung.boardService.service.PostsService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -34,13 +35,14 @@ public class PostsController {
 
     private final PostsService postsService;
     private final FileService fileService;
+    private final MemberService memberService;
 
     @GetMapping
     public String posts(@SessionAttribute(value = "loginMember", required = false) Member member, Model model,
                         @ModelAttribute("search") PostSearchCond postSearchCond) {
-        log.info("title = {}", postSearchCond.getTitle());
+        Member loginMember = memberService.findById(member.getId()).get();
         List<Post> posts = postsService.findAll(postSearchCond);
-        model.addAttribute("loginMember", member);
+        model.addAttribute("loginMember", loginMember);
         model.addAttribute("posts", posts);
         return "posts/posts";
     }

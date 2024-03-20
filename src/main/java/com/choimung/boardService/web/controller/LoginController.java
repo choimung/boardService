@@ -80,22 +80,14 @@ public class LoginController {
     }
 
     @PostMapping("/signup")
-    public String signup(@Validated @ModelAttribute("signupDto") MemberSignupDto memberSignupDto,
-                         BindingResult bindingResult) throws IOException {
+    public String signup(@Validated @ModelAttribute("signupDto") MemberSignupDto memberSignupDto, BindingResult bindingResult){
 
         if (bindingResult.hasErrors()) {
             log.info("error = {}", bindingResult);
             return "login/memberSignup";
         }
 
-        Member member = new Member();
-        member.setLoginId(memberSignupDto.getLoginId());
-        member.setPassword(memberSignupDto.getPassword());
-        member.setNickname(memberSignupDto.getNickName());
-        member.setGrade(Grade.USER);
-        member.setImage(fileService.storeFile(memberSignupDto.getImage()));
-
-        memberService.join(member);
+        memberService.join(memberSignupDto);
         return "redirect:/";
     }
 
