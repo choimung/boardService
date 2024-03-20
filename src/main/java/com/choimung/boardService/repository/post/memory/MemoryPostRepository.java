@@ -3,6 +3,8 @@ package com.choimung.boardService.repository.post.memory;
 import com.choimung.boardService.domain.post.Post;
 import com.choimung.boardService.dto.PostUpdateDto;
 import com.choimung.boardService.repository.post.PostRepository;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +21,7 @@ public class MemoryPostRepository implements PostRepository {
     @Override
     public Post save(Post post) {
         post.setId(++sequence);
+        post.setCreateDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
         store.put(post.getId(), post);
         return post;
     }
@@ -29,6 +32,7 @@ public class MemoryPostRepository implements PostRepository {
         post.setTitle(postUpdateDto.getTitle());
         post.setContent(postUpdateDto.getContent());
         post.setImage(postUpdateDto.getImage());
+        post.setCreateDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")));
         return post;
     }
 
