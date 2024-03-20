@@ -76,18 +76,19 @@
 ## 📃 API 명세서
 
 | Description | EndPoint | Path Variable | Method | Controller |
-| :---: | :---: | :---: | :---: | :---: |
-| 회원가입 폼 | /users/signup |  | GET | UserController |
-| 로그인 폼 | /users/login |  | GET | UserController |
-| 회원가입 | /users/signup |  | POST | UserController |
-| 로그인 | /users/login |  | POST | UserController |
-| 프로필 이미지조회 | /user/profileImage/{filename} | {filename} - 파일 이름 | GET | ImageController |
+| :--- | :---: | :---: | :---: | :---: |
+| 회원가입 페이지 | /users/signup |  | GET | UserController |
+| 회원가입 기능| /users/signup |  | POST | UserController |
+| 로그인 페이지 | /users/login |  | GET | UserController |
+| 로그인 기능| /users/login |  | POST | UserController |
+| 프로필 이미지조회 | /user/profile/{filename} | {filename} - 파일 이름 | GET | ImageController |
 | 게시물 목록조회 | /posts |  | GET |  |
-| 사용자 조회 | /users/{userId} | {userId} - 조회할 사용자의 id | GET |  |
+| 회원수정 페이지 | /users/edit |  | GET |  |
+| 회원수정 | /users/edit |  | POST |  |
 | 게시물 조회 | /posts/{postId} | {postId} - 조회할 게시물의 id | GET |  |
 | 게시물 등록 | /posts/add |  | POST |  |
-| 게시물 수정 | /posts/postId | {postId} - 수정할 게시물의 id | PUT |  |
-| 게시물 삭제 | /posts/postId | {postId} - 삭제할 게시물의 id | DELETE |  |
+| 게시물 수정 | /posts/postId/edit | {postId} - 수정할 게시물의 id | PUT |  |
+| 게시물 삭제 | /posts/postId/delete | {postId} - 삭제할 게시물의 id | DELETE |  |
 
 <br>
 
