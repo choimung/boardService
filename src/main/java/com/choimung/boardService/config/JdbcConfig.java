@@ -4,6 +4,7 @@ import com.choimung.boardService.repository.member.MemberRepository;
 import com.choimung.boardService.repository.member.jdbc.JdbcMemberRepository;
 import com.choimung.boardService.repository.member.memory.MemoryMemberRepository;
 import com.choimung.boardService.repository.post.PostRepository;
+import com.choimung.boardService.repository.post.jdbc.JdbcPostRepository;
 import com.choimung.boardService.repository.post.memory.MemoryPostRepository;
 import com.choimung.boardService.service.FileService;
 import javax.sql.DataSource;
@@ -25,6 +26,6 @@ public class JdbcConfig {
 
     @Bean
     public PostRepository postRepository() {
-        return new MemoryPostRepository(fileService);
+        return new JdbcPostRepository(dataSource);
     }
 }

@@ -49,7 +49,8 @@ public class PostsController {
 
     @GetMapping("/add")
     public String postAddForm(@SessionAttribute(value = "loginMember", required = false) Member member, Model model) {
-        model.addAttribute("loginMember", member);
+        Member loginMember = memberService.findById(member.getId()).get();
+        model.addAttribute("loginMember", loginMember);
         model.addAttribute("postAddDto", new PostsAddDto());
         return "posts/postsAddForm";
     }
@@ -57,10 +58,7 @@ public class PostsController {
     @PostMapping("/add")
     public String postAdd(@SessionAttribute(value = "loginMember") Member member, @ModelAttribute PostsAddDto postsAddDto)
             throws IOException {
-
-        String image = fileService.storeFile(postsAddDto.getImage());
-        Post post = new Post(postsAddDto.getTitle(), member.getNickname(), postsAddDto.getContent(), "today", image, 0L);
-        postsService.save(post);
+        postsService.save(postsAddDto, member);
         return "redirect:/posts";
     }
 
