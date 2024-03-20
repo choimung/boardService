@@ -45,7 +45,7 @@ public class JdbcPostRepository implements PostRepository {
             ps.setString(3, post.getImage());
             ps.setString(4, post.getContent());
             ps.setLong(5, 0L);
-            ps.setString(6, (LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd  HH:mm:ss"))));
+            ps.setString(6, (LocalDateTime.now().format(DateTimeFormatter.ofPattern("yy.MM.dd  HH:mm:ss"))));
             ps.executeUpdate();
             rs = ps.getGeneratedKeys();
 
@@ -102,6 +102,7 @@ public class JdbcPostRepository implements PostRepository {
                 post.setTitle(rs.getString("title"));
                 post.setAuthor(rs.getString("author"));
                 post.setContent(rs.getString("content"));
+                post.setImage(rs.getString("image"));
                 post.setViews(rs.getLong("views"));
                 post.setCreateDate(rs.getString("create_date"));
                 posts.add(post);
@@ -136,14 +137,23 @@ public class JdbcPostRepository implements PostRepository {
 
             if(rs.next()) {
                 Post post = new Post();
+                long currentViews = rs.getLong("views");
+                ++currentViews;
+
+                String updateSql = "UPDATE posts SET views = ? WHERE id = ?";
+                PreparedStatement updateStmt = con.prepareStatement(updateSql);
+                updateStmt.setLong(1, currentViews);
+                updateStmt.setLong(2, postId);
+
                 post.setId(rs.getLong("id"));
                 post.setTitle(rs.getString("title"));
                 post.setAuthor(rs.getString("author"));
                 post.setImage(rs.getString("image"));
-                long views = rs.getLong("views");
-                post.setViews(++views);
+                post.setViews(++currentViews);
                 post.setContent(rs.getString("content"));
                 post.setCreateDate(rs.getString("create_date"));
+
+                updateStmt.executeUpdate();
                 return Optional.of(post);
             }
 
