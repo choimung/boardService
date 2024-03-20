@@ -3,6 +3,7 @@ package com.choimung.boardService.service;
 import com.choimung.boardService.domain.post.Post;
 import com.choimung.boardService.dto.PostUpdateDto;
 import com.choimung.boardService.repository.post.PostRepository;
+import com.choimung.boardService.repository.post.PostSearchCond;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,8 @@ public class PostsService {
         return postRepository.save(post);
     }
 
-    public List<Post> findAll(){
-        return postRepository.findAll();
+    public List<Post> findAll(PostSearchCond postSearchCond){
+        return postRepository.findAll(postSearchCond);
     }
 
     public void update(Long postId, Post postUpdateDto){

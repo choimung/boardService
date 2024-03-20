@@ -11,7 +11,7 @@ public interface PostRepository {
 
     Post update(Long postId, Post post);
 
-    List<Post> findAll();
+    List<Post> findAll(PostSearchCond postSearchCond);
 
     Optional<Post> findById(Long postId);
 

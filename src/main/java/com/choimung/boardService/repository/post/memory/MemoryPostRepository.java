@@ -3,6 +3,7 @@ package com.choimung.boardService.repository.post.memory;
 import com.choimung.boardService.domain.post.Post;
 import com.choimung.boardService.dto.PostUpdateDto;
 import com.choimung.boardService.repository.post.PostRepository;
+import com.choimung.boardService.repository.post.PostSearchCond;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 @Repository
 public class MemoryPostRepository implements PostRepository {
@@ -42,8 +44,18 @@ public class MemoryPostRepository implements PostRepository {
     }
 
     @Override
-    public List<Post> findAll() {
-        return new ArrayList<>(store.values());
+    public List<Post> findAll(PostSearchCond postSearchCond) {
+
+        String title = postSearchCond.getTitle();
+
+        if(!StringUtils.hasText(title)) {
+            return new ArrayList<>(store.values());
+        }
+
+        return store.values()
+                .stream()
+                .filter(p -> p.getTitle().contains(title)).toList();
+
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.choimung.boardService.domain.member.Member;
 import com.choimung.boardService.domain.post.Post;
 import com.choimung.boardService.dto.PostUpdateDto;
 import com.choimung.boardService.dto.PostsAddDto;
+import com.choimung.boardService.repository.post.PostSearchCond;
 import com.choimung.boardService.service.FileService;
 import com.choimung.boardService.service.PostsService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,6 +14,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/posts")
 @Controller
@@ -33,8 +36,10 @@ public class PostsController {
     private final FileService fileService;
 
     @GetMapping
-    public String posts(@SessionAttribute(value = "loginMember", required = false) Member member, Model model) {
-        List<Post> posts = postsService.findAll();
+    public String posts(@SessionAttribute(value = "loginMember", required = false) Member member, Model model,
+                        @ModelAttribute("search") PostSearchCond postSearchCond) {
+        log.info("title = {}", postSearchCond.getTitle());
+        List<Post> posts = postsService.findAll(postSearchCond);
         model.addAttribute("loginMember", member);
         model.addAttribute("posts", posts);
         return "posts/posts";
