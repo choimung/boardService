@@ -98,7 +98,7 @@ CREATE TABLE member
     password varchar(20),
     name     varchar(20),
     grade    varchar(20),
-    image    varchar(20),
+    image    varchar(255),
     primary key (id)
 )
 ```
