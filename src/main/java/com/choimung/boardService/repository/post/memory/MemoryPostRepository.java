@@ -35,7 +35,7 @@ public class MemoryPostRepository implements PostRepository {
     }
 
     @Override
-    public Post update(Long postId, PostUpdateDto postUpdateDto) {
+    public void update(Long postId, PostUpdateDto postUpdateDto) {
         Post findPost = findById(postId).get();
 
         findPost.setTitle(postUpdateDto.getTitle());
@@ -47,8 +47,6 @@ public class MemoryPostRepository implements PostRepository {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        return findPost;
     }
 
     @Override

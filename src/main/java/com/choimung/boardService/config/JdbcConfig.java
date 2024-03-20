@@ -26,6 +26,6 @@ public class JdbcConfig {
 
     @Bean
     public PostRepository postRepository() {
-        return new JdbcPostRepository(dataSource);
+        return new JdbcPostRepository(dataSource,fileService);
     }
 }

@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface PostRepository {
     Post save(Post post);
 
-    Post update(Long postId, PostUpdateDto postUpdateDto);
+    void update(Long postId, PostUpdateDto postUpdateDto);
 
     List<Post> findAll(PostSearchCond postSearchCond);
 

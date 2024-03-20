@@ -4,6 +4,8 @@ import com.choimung.boardService.domain.post.Post;
 import com.choimung.boardService.dto.PostUpdateDto;
 import com.choimung.boardService.repository.post.PostRepository;
 import com.choimung.boardService.repository.post.PostSearchCond;
+import com.choimung.boardService.service.FileService;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -28,6 +30,7 @@ import org.springframework.util.StringUtils;
 public class JdbcPostRepository implements PostRepository {
 
     private final DataSource dataSource;
+    private final FileService fileService;
 
     @Override
     public Post save(Post post) {
@@ -65,8 +68,36 @@ public class JdbcPostRepository implements PostRepository {
     }
 
     @Override
-    public Post update(Long postId, PostUpdateDto postUpdateDto) {
-        return null;
+    public void update(Long postId, PostUpdateDto postUpdateDto) {
+
+        String sql = "UPDATE POSTS SET title = ?, image = ?, content = ?, create_date = ? WHERE id = ?";
+
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, postUpdateDto.getTitle());
+            ps.setString(2, fileService.storeFile(postUpdateDto.getImage()));
+            ps.setString(3, postUpdateDto.getContent());
+            ps.setString(4, (LocalDateTime.now().format(DateTimeFormatter.ofPattern("yy.MM.dd  HH:mm:ss"))));
+            ps.setLong(5, postId);
+            ps.executeUpdate();
+            rs = ps.getGeneratedKeys();
+
+        } catch (SQLException e) {
+            log.error("db error", e);
+            throw new RuntimeException(e);
+        } catch (IOException f) {
+            log.error("db error", f);
+            throw new RuntimeException(f);
+        } finally {
+            JdbcUtils.closeResultSet(rs);
+            JdbcUtils.closeStatement(ps);
+            JdbcUtils.closeConnection(con);
+        }
     }
 
     @Override
